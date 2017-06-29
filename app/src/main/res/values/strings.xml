@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ITuenes Search - Kotlin</string>
+    <string name="title_activity_music_listing">Music Listing</string>
 </resources>
