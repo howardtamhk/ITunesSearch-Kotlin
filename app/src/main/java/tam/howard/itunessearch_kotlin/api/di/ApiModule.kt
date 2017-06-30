@@ -1,8 +1,8 @@
-package tam.howard.ituenessearch_kotlin.api.di
+package tam.howard.itunessearch_kotlin.api.di
 
 import dagger.Module
 import dagger.Provides
-import tam.howard.ituenessearch_kotlin.api.ApiManager
+import tam.howard.itunessearch_kotlin.api.ApiManager
 import javax.inject.Singleton
 
 /**

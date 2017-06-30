@@ -1,4 +1,4 @@
-package tam.howard.ituenessearch_kotlin.base
+package tam.howard.itunessearch_kotlin.base
 
 import android.databinding.BaseObservable
 import android.support.annotation.CallSuper

@@ -1,3 +1,7 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="music_listing_padding_top">10dp</dimen>
+
+    <dimen name="music_listing_editText_margin_h">10dp</dimen>
+    <dimen name="music_listing_btn_serach_margin_h">10dp</dimen>
 </resources>

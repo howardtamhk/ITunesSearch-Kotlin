@@ -1,4 +1,4 @@
-package tam.howard.ituenessearch_kotlin;
+package tam.howard.itunessearch_kotlin;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

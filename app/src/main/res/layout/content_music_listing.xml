@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="tam.howard.itunessearch_kotlin.musicListing.MusicListingContract.MusicListingViewModel"/>
+
+        <import type="android.widget.EditText" />
+        <import type="android.text.Editable" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/music_listing_padding_top"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="tam.howard.itunessearch_kotlin.musicListing.MusicListingActivity"
+        tools:showIn="@layout/activity_music_listing">
+
+        <Button
+            android:id="@+id/btn_music_search_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/music_listing_btn_serach_margin_h"
+            android:text="@string/music_listing_btn_serach_text"
+            android:onClick="@{() -> vm.onClickSearchButton(((EditText)editTextMusicSearchSearchKeyword).text.toString())}"/>
+
+        <EditText
+            android:id="@+id/editText_music_search_search_keyword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/btn_music_search_search"
+            android:layout_marginLeft="@dimen/music_listing_editText_margin_h"
+            android:layout_marginRight="@dimen/music_listing_editText_margin_h"
+            android:hint="@string/music_listing_editText_serach_keywords_hint"/>
+
+
+        <!--<com.malinskiy.superrecyclerview.SuperRecyclerView-->
+            <!--android:id="@+id/recyclerView_music_search_listing"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_below="@id/editText_music_search_search_keyword"-->
+            <!--app:layout_moreProgress="@layout/layout_more_progress"-->
+            <!--app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"-->
+            <!--app:scrollbarStyle="outsideOverlay"/>-->
+
+
+
+    </RelativeLayout>
+
+</layout>
+

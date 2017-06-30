@@ -1,4 +1,4 @@
-package tam.howard.ituenessearch_kotlin;
+package tam.howard.itunessearch_kotlin;
 
 import org.junit.Test;
 
