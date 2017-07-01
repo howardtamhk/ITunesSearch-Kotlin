@@ -25,7 +25,7 @@ abstract class BaseActivity<B : ViewDataBinding, VM : BaseContract.BaseViewModel
         (viewModel as BaseContract.BaseViewModel<BaseContract.BaseView>).onAttachView(this)
     }
 
-    override fun getActivityContext(): Context {
+    fun getActivityContext(): Context {
         return this
     }
 }

@@ -29,7 +29,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/music_listing_btn_serach_margin_h"
             android:text="@string/music_listing_btn_serach_text"
-            android:onClick="@{() -> vm.onClickSearchButton(((EditText)editTextMusicSearchSearchKeyword).text.toString())}"/>
+            android:onClick="@{() -> vm.onClickSearchAction(editTextMusicSearchSearchKeyword)}"/>
 
         <EditText
             android:id="@+id/editText_music_search_search_keyword"
@@ -39,17 +39,17 @@
             android:layout_toLeftOf="@id/btn_music_search_search"
             android:layout_marginLeft="@dimen/music_listing_editText_margin_h"
             android:layout_marginRight="@dimen/music_listing_editText_margin_h"
+            android:lines="1"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
             android:hint="@string/music_listing_editText_serach_keywords_hint"/>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView_music_search_listing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/editText_music_search_search_keyword"/>
 
-        <!--<com.malinskiy.superrecyclerview.SuperRecyclerView-->
-            <!--android:id="@+id/recyclerView_music_search_listing"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_below="@id/editText_music_search_search_keyword"-->
-            <!--app:layout_moreProgress="@layout/layout_more_progress"-->
-            <!--app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"-->
-            <!--app:scrollbarStyle="outsideOverlay"/>-->
 
 
 

@@ -9,7 +9,6 @@ import android.databinding.Observable
 interface BaseContract {
 
     interface BaseView{
-        fun getActivityContext(): Context
     }
 
     interface BaseViewModel<V: BaseView> : Observable {

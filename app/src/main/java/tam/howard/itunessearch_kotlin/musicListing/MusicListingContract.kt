@@ -1,6 +1,8 @@
 package tam.howard.itunessearch_kotlin.musicListing
 
 import android.text.Editable
+import android.view.View
+import android.widget.EditText
 import tam.howard.itunessearch_kotlin.base.BaseContract
 
 /**
@@ -13,6 +15,6 @@ interface MusicListingContract {
     }
 
     interface MusicListingViewModel: BaseContract.BaseViewModel<MusicListingView>{
-        fun onClickSearchAction(keywords: String)
+        fun onClickSearchAction(keywords: EditText)
     }
 }

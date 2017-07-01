@@ -6,7 +6,7 @@ import android.support.annotation.CallSuper
 /**
  * Created by Howard on 29/6/2017.
  */
-abstract class BaseActivityViewModel<V : BaseContract.BaseView> : BaseObservable(), BaseContract.BaseViewModel<V> {
+abstract class BaseViewModelImpl<V : BaseContract.BaseView> : BaseObservable(), BaseContract.BaseViewModel<V> {
 
     var view: V? = null
         private set
