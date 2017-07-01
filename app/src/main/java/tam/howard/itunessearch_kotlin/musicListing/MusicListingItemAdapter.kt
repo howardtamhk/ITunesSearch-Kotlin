@@ -42,12 +42,6 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
         val mediaPlayer = musicListingViewModelImpl.mediaPlayer
         var playing: Boolean = false
 
-        init {
-            mediaPlayer.setOnCompletionListener {
-                resetPlayingState()
-                setPlayIcon()
-            }
-        }
 
         fun bindData(position: Int, musicListingModel: MusicListingItemModel) {
 
@@ -76,6 +70,10 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
         }
 
         private fun startPlay(previewUrl: String) {
+
+            binding.imageBtnMusicListingPlay.visibility = View.GONE
+            binding.progressBarMusicListingPlay.visibility = View.VISIBLE
+
             if (mediaPlayer.isPlaying) {
                 resetPlayingState()
                 (binding.imageBtnMusicListingPlay.context as MusicListingActivity).resetListingPlayingIcon()
@@ -84,8 +82,15 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setDataSource(previewUrl);
             mediaPlayer.setOnPreparedListener {
+                binding.imageBtnMusicListingPlay.visibility = View.VISIBLE
+                binding.progressBarMusicListingPlay.visibility = View.GONE
                 setStopIcon()
                 it.start()
+
+                it.setOnCompletionListener {
+                    resetPlayingState()
+                    setPlayIcon()
+                }
             }
             mediaPlayer.prepareAsync()
             playing = true
