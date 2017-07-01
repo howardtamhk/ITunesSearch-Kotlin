@@ -25,6 +25,25 @@ class MusicListingActivity : BaseActivity<ActivityMusicListingBinding, MusicList
 
     }
 
+    override fun onStop() {
+        super.onStop()
+        viewModel.resetMediaPlayer()
+        resetListingPlayingIcon()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.releaseMediaPlayer()
+    }
+
+    fun resetListingPlayingIcon(){
+        if (viewModel.playingPosition() < 0 ){
+            return
+        }
+        val musicListingItemViewHolder: MusicListingItemAdapter.MusicListingItemViewHolder? = (recyclerView_music_search_listing.findViewHolderForAdapterPosition(viewModel.playingPosition()) as? MusicListingItemAdapter.MusicListingItemViewHolder)
+        musicListingItemViewHolder?.onOtherPlayButtonClick()
+    }
+
     private fun injectDagger() {
         val musicListingComponent: MusicListingComponent = DaggerMusicListingComponent.builder()
                 .apiComponent(MyApplication.apiComponent)

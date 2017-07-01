@@ -1,7 +1,7 @@
 package tam.howard.itunessearch_kotlin.musicListing
 
 import android.content.Context
-import android.hardware.input.InputManager
+import android.media.MediaPlayer
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
@@ -19,15 +19,17 @@ import javax.inject.Inject
  * Created by Howard on 30/6/2017.
  */
 class MusicListingViewModelImpl @Inject constructor(private val apiManager: ApiManager) : BaseViewModelImpl<MusicListingContract.MusicListingView>(), MusicListingContract.MusicListingViewModel {
-
-
     val musicList: ArrayList<MusicListingItemModel> = ArrayList()
+
     val musicListingItemAdapter: MusicListingItemAdapter
 
-    init {
-        musicListingItemAdapter = MusicListingItemAdapter(musicList)
-    }
 
+    val mediaPlayer: MediaPlayer = MediaPlayer()
+    var playingPosition: Int = -1
+
+    init {
+        musicListingItemAdapter = MusicListingItemAdapter(musicList, this)
+    }
     override fun onClickSearchAction(editText: EditText) {
         resetListing();
 
@@ -68,6 +70,21 @@ class MusicListingViewModelImpl @Inject constructor(private val apiManager: ApiM
 
         })
     }
+
+    override fun playingPosition(): Int {
+        return playingPosition
+    }
+
+    override fun releaseMediaPlayer() {
+        resetMediaPlayer()
+        mediaPlayer.release()
+    }
+
+    override fun resetMediaPlayer(){
+        mediaPlayer.stop()
+        mediaPlayer.reset()
+    }
+
 
     private fun hideSoftKeyboard(editText: EditText) {
         val inputManager:InputMethodManager = editText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager;

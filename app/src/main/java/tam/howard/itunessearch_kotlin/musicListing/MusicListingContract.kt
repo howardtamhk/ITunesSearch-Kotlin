@@ -16,5 +16,11 @@ interface MusicListingContract {
 
     interface MusicListingViewModel: BaseContract.BaseViewModel<MusicListingView>{
         fun onClickSearchAction(keywords: EditText)
+
+        fun resetMediaPlayer()
+
+        fun releaseMediaPlayer()
+
+        fun playingPosition(): Int
     }
 }

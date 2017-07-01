@@ -1,7 +1,9 @@
 package tam.howard.itunessearch_kotlin.musicListing
 
-import android.databinding.BindingAdapter
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +16,16 @@ import tam.howard.itunessearch_kotlin.musicListing.model.MusicListingItemModel
 /**
  * Created by Howard on 1/7/2017.
  */
-class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemModel>): RecyclerView.Adapter<MusicListingItemAdapter.MusicListingItemViewHolder>() {
+class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemModel>, private val musicListingViewModelImpl: MusicListingViewModelImpl) : RecyclerView.Adapter<MusicListingItemAdapter.MusicListingItemViewHolder>() {
+
+    val viewHolderList: ArrayList<MusicListingItemViewHolder> = ArrayList()
+
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): MusicListingItemViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.card_music_listing_item, viewGroup, false)
-        return MusicListingItemViewHolder(view)
+        val musicListingItemViewHolder = MusicListingItemViewHolder(view, musicListingViewModelImpl)
+        viewHolderList.add(musicListingItemViewHolder)
+        return musicListingItemViewHolder
     }
 
     override fun getItemCount(): Int = musicList.size
@@ -26,21 +33,81 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
 
     override fun onBindViewHolder(musicListingItemViewHolder: MusicListingItemViewHolder, position: Int) {
         val musicListingModel: MusicListingItemModel = musicList.get(position)
-        musicListingItemViewHolder.bindData(musicListingModel)
+        musicListingItemViewHolder.bindData(position, musicListingModel)
     }
 
 
+    class MusicListingItemViewHolder(itemView: View, private val musicListingViewModelImpl: MusicListingViewModelImpl) : BaseViewHolder<CardMusicListingItemBinding, MusicListingViewModelImpl>(itemView) {
 
+        val mediaPlayer = musicListingViewModelImpl.mediaPlayer
+        var playing: Boolean = false
 
+        init {
+            mediaPlayer.setOnCompletionListener {
+                resetPlayingState()
+                setPlayIcon()
+            }
+        }
 
-    class MusicListingItemViewHolder(itemView: View) : BaseViewHolder<CardMusicListingItemBinding, MusicListingViewModelImpl>(itemView){
+        fun bindData(position: Int, musicListingModel: MusicListingItemModel) {
 
-        fun bindData(musicListingModel: MusicListingItemModel){
+            if (position != musicListingViewModelImpl.playingPosition) {
+                Log.d("TEst", "$position ${musicListingViewModelImpl.playingPosition}")
+                playing = false
+                setPlayIcon()
+            } else {
+                playing = true
+                setStopIcon()
+            }
 
             binding.item = musicListingModel
             binding.executePendingBindings()
 
             Picasso.with(binding.imageViewMusicListingItemSongPhoto.context).load(musicListingModel.image).into(binding.imageViewMusicListingItemSongPhoto)
+
+            binding.imageBtnMusicListingPlay.setOnClickListener {
+                if (playing) {
+                    resetPlayingState()
+                    setPlayIcon()
+                } else {
+                    startPlay(musicListingModel.previewUrl)
+                }
+            }
+        }
+
+        private fun startPlay(previewUrl: String) {
+            if (mediaPlayer.isPlaying) {
+                resetPlayingState()
+                (binding.imageBtnMusicListingPlay.context as MusicListingActivity).resetListingPlayingIcon()
+            }
+
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setDataSource(previewUrl);
+            mediaPlayer.setOnPreparedListener {
+                setStopIcon()
+                it.start()
+            }
+            mediaPlayer.prepareAsync()
+            playing = true
+            musicListingViewModelImpl.playingPosition = layoutPosition
+        }
+
+        fun resetPlayingState() {
+            musicListingViewModelImpl.resetMediaPlayer()
+            playing = false
+        }
+
+        fun onOtherPlayButtonClick(){
+            playing = false
+            setPlayIcon()
+        }
+
+        private fun setPlayIcon() {
+            binding.imageBtnMusicListingPlay.setImageResource(R.drawable.ic_play_arrow_black)
+        }
+
+        private fun setStopIcon() {
+            binding.imageBtnMusicListingPlay.setImageResource(R.drawable.ic_stop_black)
         }
 
 
