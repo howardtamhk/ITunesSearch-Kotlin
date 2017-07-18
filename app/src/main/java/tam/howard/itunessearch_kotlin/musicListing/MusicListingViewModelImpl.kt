@@ -1,6 +1,7 @@
 package tam.howard.itunessearch_kotlin.musicListing
 
 import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -13,6 +14,7 @@ import tam.howard.itunessearch_kotlin.base.BaseViewModelImpl
 import tam.howard.itunessearch_kotlin.config.Constant
 import tam.howard.itunessearch_kotlin.musicListing.model.MusicListingItemModel
 import tam.howard.itunessearch_kotlin.musicListing.model.MusicListingResponseModel
+import tam.howard.itunessearch_kotlin.test.TestDaggerSingletonActivity
 import javax.inject.Inject
 
 /**
@@ -31,16 +33,19 @@ class MusicListingViewModelImpl @Inject constructor(private val apiManager: ApiM
         musicListingItemAdapter = MusicListingItemAdapter(musicList, this)
     }
     override fun onClickSearchAction(editText: EditText) {
-        resetListing();
+//        resetListing();
+//
+//        hideSoftKeyboard(editText)
+//
+//        val query: HashMap<String, String> = HashMap()
+//        query.put(Constant.ITUNES_API_PARAMETER_TERM_KEY, editText.text.toString())
+//        query.put(Constant.ITUNES_API_PARAMETER_MEDIA_KEY, Constant.ITUNES_API_PARAMETER_MEDIA_VALUE)
+//        query.put(Constant.ITUNES_API_PARAMETER_LIMIT_KEY, Constant.LISTING_PAGE_SIZE.toString())
+//
+//        callSearchApi(query)
 
-        hideSoftKeyboard(editText)
-
-        val query: HashMap<String, String> = HashMap()
-        query.put(Constant.ITUNES_API_PARAMETER_TERM_KEY, editText.text.toString())
-        query.put(Constant.ITUNES_API_PARAMETER_MEDIA_KEY, Constant.ITUNES_API_PARAMETER_MEDIA_VALUE)
-        query.put(Constant.ITUNES_API_PARAMETER_LIMIT_KEY, Constant.LISTING_PAGE_SIZE.toString())
-
-        callSearchApi(query)
+        val intent: Intent = Intent(editText.context, TestDaggerSingletonActivity::class.java)
+        editText.context.startActivity(intent)
     }
 
     private fun resetListing() {
