@@ -45,15 +45,23 @@ dependencies {
 
     implementation("androidx.appcompat:appcompat:$rootProject.ext.androidXVersion")
     implementation("androidx.recyclerview:recyclerview:$rootProject.ext.androidXVersion")
+    implementation "androidx.activity:activity-ktx:$rootProject.ext.androidXActivityVersion"
     implementation('com.google.android.material:material:1.0.0')
+
+    implementation ("androidx.lifecycle:lifecycle-extensions:$rootProject.ext.lifecycleVersion")//arch. comp.
+    kapt ("androidx.lifecycle:lifecycle-compiler:$rootProject.ext.lifecycleVersion")
 
     implementation("com.squareup.retrofit2:retrofit:$rootProject.ext.retrofitVersion")//retrofit
     implementation("com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofitVersion")
+    implementation ("com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.retrofitVersion")
 
     implementation("com.google.dagger:dagger:$rootProject.ext.daggerVersion")//dagger
     kapt("com.google.dagger:dagger-compiler:$rootProject.ext.daggerVersion")
     implementation("com.google.dagger:dagger-android-support:$rootProject.ext.daggerVersion")
     kapt("com.google.dagger:dagger-android-processor:$rootProject.ext.daggerVersion")
+
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.16"
 
     implementation 'com.google.code.gson:gson:2.8.5'//gson
 

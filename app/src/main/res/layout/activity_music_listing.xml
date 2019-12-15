@@ -7,7 +7,7 @@
     <data>
         <variable
             name="vm"
-            type="tam.howard.itunessearch_kotlin.musicListing.MusicListingContract.MusicListingViewModel"/>
+            type="tam.howard.itunessearch_kotlin.musicListing.MusicListingViewModel"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

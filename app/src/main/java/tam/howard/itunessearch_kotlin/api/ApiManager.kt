@@ -1,40 +1,27 @@
 package tam.howard.itunessearch_kotlin.api
 
-import android.util.Log
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import tam.howard.itunessearch_kotlin.api.endpoint.ITunesApiEndpoint
-import tam.howard.itunessearch_kotlin.config.Constant
-import tam.howard.itunessearch_kotlin.musicListing.model.MusicListingResponseModel
-import javax.inject.Singleton
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import retrofit2.Response
 
-/**
- * Created by Howard on 29/6/2017.
- */
+class ApiException(errorCode: Int?, errorBodyStr: String?) : Throwable()
 
-@Singleton
-class ApiManager {
+fun <T> Observable<Response<T>>.call(): Observable<T> {
+    return this.subscribeOn(Schedulers.io())
+            .switchMap { response ->
+                Observable.create<T> { observer ->
+                    if (response.isSuccessful) {
+                        response.body()?.let {
+                            observer.onNext(it)
+                        } ?: kotlin.run {
+                            observer.onError(ApiException(null, "Response body is null"))
+                        }
+                    } else {
+                        observer.onError(ApiException(response.code(), response.errorBody()?.string()))
 
-    init {
-        Log.d("ApiManager", "init")
-    }
-
-    val iTunesApiEndpoint: ITunesApiEndpoint
-
-    init {
-        val iTunesApiRetrofit = Retrofit.Builder()
-                .baseUrl(Constant.ITUNES_API_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-
-        iTunesApiEndpoint = iTunesApiRetrofit.create(ITunesApiEndpoint::class.java)
-    }
-
-    fun getSearchResult(queryMap: HashMap<String, String>, callback: Callback<MusicListingResponseModel> ){
-        val musicListingCall: Call<MusicListingResponseModel> = iTunesApiEndpoint.getSearchResult(queryMap)
-        musicListingCall.enqueue(callback)
-    }
-
+                    }
+                }
+            }
+            .observeOn(AndroidSchedulers.mainThread())
 }
