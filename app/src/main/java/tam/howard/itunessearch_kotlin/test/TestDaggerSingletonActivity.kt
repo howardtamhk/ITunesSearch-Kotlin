@@ -1,6 +1,6 @@
 package tam.howard.itunessearch_kotlin.test
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import tam.howard.itunessearch_kotlin.MyApplication
 

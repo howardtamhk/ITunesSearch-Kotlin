@@ -1,11 +1,11 @@
 package tam.howard.itunessearch_kotlin.base
 
 import android.content.Context
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
-import android.support.v7.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.annotation.LayoutRes
+import androidx.annotation.LayoutRes
 import tam.howard.itunessearch_kotlin.BR
 import javax.inject.Inject
 

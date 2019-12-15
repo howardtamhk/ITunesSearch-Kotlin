@@ -1,7 +1,7 @@
 package tam.howard.itunessearch_kotlin.base
 
-import android.databinding.BaseObservable
-import android.support.annotation.CallSuper
+import androidx.databinding.BaseObservable
+import androidx.annotation.CallSuper
 
 /**
  * Created by Howard on 29/6/2017.

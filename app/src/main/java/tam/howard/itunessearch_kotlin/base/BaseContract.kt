@@ -1,7 +1,7 @@
 package tam.howard.itunessearch_kotlin.base
 
 import android.content.Context
-import android.databinding.Observable
+import androidx.databinding.Observable
 
 /**
  * Created by Howard on 29/6/2017.

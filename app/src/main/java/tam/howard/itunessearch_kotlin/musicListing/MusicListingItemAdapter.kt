@@ -2,7 +2,7 @@ package tam.howard.itunessearch_kotlin.musicListing
 
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -54,12 +54,12 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
                 setStopIcon()
             }
 
-            binding.item = musicListingModel
-            binding.executePendingBindings()
+            binding?.item = musicListingModel
+            binding?.executePendingBindings()
 
-            Picasso.with(binding.imageViewMusicListingItemSongPhoto.context).load(musicListingModel.image).into(binding.imageViewMusicListingItemSongPhoto)
+            Picasso.with(binding?.imageViewMusicListingItemSongPhoto?.context).load(musicListingModel.image).into(binding?.imageViewMusicListingItemSongPhoto)
 
-            binding.imageBtnMusicListingPlay.setOnClickListener {
+            binding?.imageBtnMusicListingPlay?.setOnClickListener {
                 if (playing) {
                     resetPlayingState()
                     setPlayIcon()
@@ -71,19 +71,19 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
 
         private fun startPlay(previewUrl: String) {
 
-            binding.imageBtnMusicListingPlay.visibility = View.GONE
-            binding.progressBarMusicListingPlay.visibility = View.VISIBLE
+            binding?.imageBtnMusicListingPlay?.visibility = View.GONE
+            binding?.progressBarMusicListingPlay?.visibility = View.VISIBLE
 
             if (mediaPlayer.isPlaying) {
                 resetPlayingState()
-                (binding.imageBtnMusicListingPlay.context as MusicListingActivity).resetListingPlayingIcon()
+                (binding?.imageBtnMusicListingPlay?.context as MusicListingActivity).resetListingPlayingIcon()
             }
 
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setDataSource(previewUrl);
             mediaPlayer.setOnPreparedListener {
-                binding.imageBtnMusicListingPlay.visibility = View.VISIBLE
-                binding.progressBarMusicListingPlay.visibility = View.GONE
+                binding?.imageBtnMusicListingPlay?.visibility = View.VISIBLE
+                binding?.progressBarMusicListingPlay?.visibility = View.GONE
                 setStopIcon()
                 it.start()
 
@@ -108,11 +108,11 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
         }
 
         private fun setPlayIcon() {
-            binding.imageBtnMusicListingPlay.setImageResource(R.drawable.ic_play_arrow_black)
+            binding?.imageBtnMusicListingPlay?.setImageResource(R.drawable.ic_play_arrow_black)
         }
 
         private fun setStopIcon() {
-            binding.imageBtnMusicListingPlay.setImageResource(R.drawable.ic_stop_black)
+            binding?.imageBtnMusicListingPlay?.setImageResource(R.drawable.ic_stop_black)
         }
 
 

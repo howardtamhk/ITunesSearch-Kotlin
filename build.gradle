@@ -8,9 +8,9 @@ buildscript {
         gradlePluginVersion = '3.5.3'
         kotlin_version = '1.3.61'
 
-        supportLibraryVersion = '25.4.0'
+        androidXVersion = '1.1.0'
         retrofitVersion = '2.3.0'
-        daggerVersion = '2.4'
+        daggerVersion = '2.25.2'
 
     }
 
