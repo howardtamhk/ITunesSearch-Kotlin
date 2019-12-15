@@ -10,6 +10,9 @@ import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import tam.howard.itunessearch_kotlin.R
 import tam.howard.itunessearch_kotlin.base.BaseViewHolder
+import tam.howard.itunessearch_kotlin.base.extension.gone
+import tam.howard.itunessearch_kotlin.base.extension.setRemoteImage
+import tam.howard.itunessearch_kotlin.base.extension.visible
 import tam.howard.itunessearch_kotlin.databinding.CardMusicListingItemBinding
 import tam.howard.itunessearch_kotlin.musicListing.model.MusicListingItemModel
 
@@ -57,7 +60,7 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
             binding?.item = musicListingModel
             binding?.executePendingBindings()
 
-            Picasso.with(binding?.imageViewMusicListingItemSongPhoto?.context).load(musicListingModel.image).into(binding?.imageViewMusicListingItemSongPhoto)
+            binding?.imageViewMusicListingItemSongPhoto?.setRemoteImage(musicListingModel.image)
 
             binding?.imageBtnMusicListingPlay?.setOnClickListener {
                 if (playing) {
@@ -71,8 +74,8 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
 
         private fun startPlay(previewUrl: String) {
 
-            binding?.imageBtnMusicListingPlay?.visibility = View.GONE
-            binding?.progressBarMusicListingPlay?.visibility = View.VISIBLE
+            binding?.imageBtnMusicListingPlay?.gone()
+            binding?.progressBarMusicListingPlay?.visible()
 
             if (mediaPlayer.isPlaying) {
                 resetPlayingState()
@@ -82,8 +85,8 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setDataSource(previewUrl);
             mediaPlayer.setOnPreparedListener {
-                binding?.imageBtnMusicListingPlay?.visibility = View.VISIBLE
-                binding?.progressBarMusicListingPlay?.visibility = View.GONE
+                binding?.imageBtnMusicListingPlay?.visible()
+                binding?.progressBarMusicListingPlay?.gone()
                 setStopIcon()
                 it.start()
 
