@@ -20,18 +20,14 @@ import javax.inject.Inject
 class MusicListingViewModel @Inject constructor(private val iTunesApiEndpoint: ITunesApiEndpoint) : BaseViewModel() {
     val musicList: ArrayList<MusicListingItemModel> = ArrayList()
 
-    val musicListingItemAdapter: MusicListingItemAdapter
-
 
     val mediaPlayer: MediaPlayer = MediaPlayer()
     var playingPosition: Int = -1
 
+    val onMusicListUpdate: MutableLiveData<ArrayList<MusicListingItemModel>> = MutableLiveData()
     val showNetworkError: MutableLiveData<Boolean> = MutableLiveData()
     val showEmptyListUi: MutableLiveData<Boolean> = MutableLiveData()
 
-    init {
-        musicListingItemAdapter = MusicListingItemAdapter(musicList, this)
-    }
 
     fun onClickSearchAction(editText: EditText) {
         resetListing()
@@ -55,10 +51,11 @@ class MusicListingViewModel @Inject constructor(private val iTunesApiEndpoint: I
         iTunesApiEndpoint.getSearchResult(queryMap).call().subscribe({
             when (it.results.size){
                 0 -> showEmptyListUi.postValue(true)
-                else -> musicList.addAll(it.results)
+                else -> {
+                    musicList.addAll(it.results)
+                    onMusicListUpdate.postValue(musicList)
+                }
             }
-
-            musicListingItemAdapter.notifyDataSetChanged()
         }, {
             showNetworkError.postValue(true)
         }).addTo(this.disposables)

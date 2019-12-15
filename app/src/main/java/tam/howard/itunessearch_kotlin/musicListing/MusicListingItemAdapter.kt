@@ -1,5 +1,6 @@
 package tam.howard.itunessearch_kotlin.musicListing
 
+import android.media.AudioAttributes
 import android.media.AudioManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -18,7 +19,7 @@ import tam.howard.itunessearch_kotlin.musicListing.model.MusicListingItemModel
 /**
  * Created by Howard on 1/7/2017.
  */
-class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemModel>, private val musicListingViewModel: MusicListingViewModel) : ListAdapter<MusicListingItemModel, MusicListingItemAdapter.MusicListingItemViewHolder>(DIFF_UTIL){
+class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemModel>, private val musicListingViewModel: MusicListingViewModel) : ListAdapter<MusicListingItemModel, MusicListingItemAdapter.MusicListingItemViewHolder>(DIFF_UTIL) {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): MusicListingItemViewHolder {
         val binding = DataBindingUtil.inflate<CardMusicListingItemBinding>(LayoutInflater.from(viewGroup.context), R.layout.card_music_listing_item, viewGroup, false)
@@ -76,8 +77,8 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
                 (binding.imageBtnMusicListingPlay?.context as MusicListingActivity).resetListingPlayingIcon()
             }
 
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setDataSource(previewUrl);
+            mediaPlayer.setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build())
+            mediaPlayer.setDataSource(previewUrl)
             mediaPlayer.setOnPreparedListener {
                 binding.imageBtnMusicListingPlay?.visible()
                 binding.progressBarMusicListingPlay?.gone()
@@ -99,7 +100,7 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
             playing = false
         }
 
-        fun onOtherPlayButtonClick(){
+        fun onOtherPlayButtonClick() {
             playing = false
             setPlayIcon()
         }
@@ -118,7 +119,7 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
     companion object {
         val DIFF_UTIL = object : DiffUtil.ItemCallback<MusicListingItemModel>() {
             override fun areItemsTheSame(oldItem: MusicListingItemModel, newItem: MusicListingItemModel): Boolean =
-                 oldItem.previewUrl == newItem.previewUrl
+                    oldItem.previewUrl == newItem.previewUrl
 
 
             override fun areContentsTheSame(oldItem: MusicListingItemModel, newItem: MusicListingItemModel): Boolean =

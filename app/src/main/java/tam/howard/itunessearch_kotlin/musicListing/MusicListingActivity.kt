@@ -15,6 +15,9 @@ import tam.howard.itunessearch_kotlin.databinding.ActivityMusicListingBinding
 
 class MusicListingActivity : BaseActivity<ActivityMusicListingBinding, MusicListingViewModel>() {
 
+    val musicListingItemAdapter: MusicListingItemAdapter by lazy {
+        MusicListingItemAdapter(viewModel.musicList, viewModel)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +48,14 @@ class MusicListingActivity : BaseActivity<ActivityMusicListingBinding, MusicList
         }
 
         recyclerView_music_search_listing.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        recyclerView_music_search_listing.adapter = (viewModel as MusicListingViewModel).musicListingItemAdapter
+        recyclerView_music_search_listing.adapter = musicListingItemAdapter
     }
 
     override fun subscribeLiveData() {
+        viewModel.onMusicListUpdate.observe(this, Observer {
+            musicListingItemAdapter.submitList(it)
+        })
+
         viewModel.showNetworkError.observe(this, Observer {
             Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_SHORT).show()
         })
