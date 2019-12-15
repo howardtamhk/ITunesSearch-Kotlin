@@ -2,6 +2,9 @@
     <string name="app_name">iTunes Search - Kotlin</string>
     <string name="title_activity_music_listing">iTunes Music Search</string>
 
+    <string name="network_error">Network Error</string>
+
     <string name="music_listing_editText_serach_keywords_hint">Enter keywords</string>
     <string name="music_listing_btn_serach_text">Search</string>
+    <string name="music_listing_no_result_matched">No result matched</string>
 </resources>

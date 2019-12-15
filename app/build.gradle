@@ -4,16 +4,16 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
 
     defaultConfig {
         applicationId "tam.howard.ituenessearch_kotlin"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     dataBinding {
@@ -36,35 +36,36 @@ android {
 
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.0', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version")
 
-    compile("com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion")
-    compile("com.android.support:design:$rootProject.ext.supportLibraryVersion")
-    compile("com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion")
+    implementation("androidx.appcompat:appcompat:$rootProject.ext.androidXVersion")
+    implementation("androidx.recyclerview:recyclerview:$rootProject.ext.androidXVersion")
+    implementation "androidx.activity:activity-ktx:$rootProject.ext.androidXActivityVersion"
+    implementation('com.google.android.material:material:1.0.0')
 
-    compile("com.squareup.retrofit2:retrofit:$rootProject.ext.retrofitVersion")//retrofit
-    compile("com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofitVersion")
-    //gson
+    implementation ("androidx.lifecycle:lifecycle-extensions:$rootProject.ext.lifecycleVersion")//arch. comp.
+    kapt ("androidx.lifecycle:lifecycle-compiler:$rootProject.ext.lifecycleVersion")
 
-    compile("com.google.dagger:dagger:$rootProject.ext.daggerVersion")//dagger
+    implementation("com.squareup.retrofit2:retrofit:$rootProject.ext.retrofitVersion")//retrofit
+    implementation("com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofitVersion")
+    implementation ("com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.retrofitVersion")
+
+    implementation("com.google.dagger:dagger:$rootProject.ext.daggerVersion")//dagger
     kapt("com.google.dagger:dagger-compiler:$rootProject.ext.daggerVersion")
+    implementation("com.google.dagger:dagger-android-support:$rootProject.ext.daggerVersion")
+    kapt("com.google.dagger:dagger-android-processor:$rootProject.ext.daggerVersion")
 
-    kapt("com.android.databinding:compiler:$rootProject.ext.gradlePluginVersion")//data binding
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.16"
 
-    //picasso
+    implementation 'com.google.code.gson:gson:2.8.5'//gson
 
-
-    compile 'com.google.code.gson:gson:2.8.1'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
-}
-
-kapt {
-    generateStubs = true
+    implementation 'com.squareup.picasso:picasso:2.5.2' //picasso
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
 }

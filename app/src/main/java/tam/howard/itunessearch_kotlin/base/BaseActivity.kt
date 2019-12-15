@@ -1,31 +1,44 @@
 package tam.howard.itunessearch_kotlin.base
 
 import android.content.Context
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
-import android.support.v7.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.annotation.LayoutRes
+import androidx.activity.viewModels
+import androidx.annotation.LayoutRes
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import dagger.android.support.DaggerAppCompatActivity
 import tam.howard.itunessearch_kotlin.BR
 import javax.inject.Inject
 
-abstract class BaseActivity<B : ViewDataBinding, VM : BaseContract.BaseViewModel<*>> : AppCompatActivity(), BaseContract.BaseView {
+abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel> : DaggerAppCompatActivity() {
+
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     protected lateinit var binding: B
-    @Inject protected lateinit var viewModel: VM
+    protected lateinit var viewModel: VM
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+
+    fun init(@LayoutRes layoutRes: Int, vmClass: Class<VM>) {
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[vmClass]
+
+        bindContentView(layoutRes)
+
+        setupView()
+        subscribeLiveData()
     }
 
-    protected fun bindContentView(@LayoutRes layoutRes: Int) {
+    private fun bindContentView(@LayoutRes layoutRes: Int) {
         binding = DataBindingUtil.setContentView(this, layoutRes)
         binding.setVariable(BR.vm, viewModel)
+        binding.lifecycleOwner = this
 
-        (viewModel as BaseContract.BaseViewModel<BaseContract.BaseView>).onAttachView(this)
     }
 
-    fun getActivityContext(): Context {
-        return this
-    }
+    open fun setupView() {}
+
+    open fun subscribeLiveData() {}
 }

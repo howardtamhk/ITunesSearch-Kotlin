@@ -1,30 +1,29 @@
 package tam.howard.itunessearch_kotlin.musicListing
 
+import android.media.AudioAttributes
 import android.media.AudioManager
-import android.media.MediaPlayer
-import android.support.v7.widget.RecyclerView
-import android.util.Log
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import com.squareup.picasso.Picasso
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import tam.howard.itunessearch_kotlin.R
 import tam.howard.itunessearch_kotlin.base.BaseViewHolder
+import tam.howard.itunessearch_kotlin.base.extension.gone
+import tam.howard.itunessearch_kotlin.base.extension.setRemoteImage
+import tam.howard.itunessearch_kotlin.base.extension.visible
 import tam.howard.itunessearch_kotlin.databinding.CardMusicListingItemBinding
 import tam.howard.itunessearch_kotlin.musicListing.model.MusicListingItemModel
 
 /**
  * Created by Howard on 1/7/2017.
  */
-class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemModel>, private val musicListingViewModelImpl: MusicListingViewModelImpl) : RecyclerView.Adapter<MusicListingItemAdapter.MusicListingItemViewHolder>() {
-
-    val viewHolderList: ArrayList<MusicListingItemViewHolder> = ArrayList()
-
+class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemModel>, private val musicListingViewModel: MusicListingViewModel) : ListAdapter<MusicListingItemModel, MusicListingItemAdapter.MusicListingItemViewHolder>(DIFF_UTIL) {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): MusicListingItemViewHolder {
-        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.card_music_listing_item, viewGroup, false)
-        val musicListingItemViewHolder = MusicListingItemViewHolder(view, musicListingViewModelImpl)
-        viewHolderList.add(musicListingItemViewHolder)
+        val binding = DataBindingUtil.inflate<CardMusicListingItemBinding>(LayoutInflater.from(viewGroup.context), R.layout.card_music_listing_item, viewGroup, false)
+        val musicListingItemViewHolder = MusicListingItemViewHolder(binding, musicListingViewModel)
         return musicListingItemViewHolder
     }
 
@@ -37,16 +36,15 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
     }
 
 
-    class MusicListingItemViewHolder(itemView: View, private val musicListingViewModelImpl: MusicListingViewModelImpl) : BaseViewHolder<CardMusicListingItemBinding, MusicListingViewModelImpl>(itemView) {
+    class MusicListingItemViewHolder(binding: CardMusicListingItemBinding, private val musicListingViewModel: MusicListingViewModel) : BaseViewHolder<CardMusicListingItemBinding>(binding) {
 
-        val mediaPlayer = musicListingViewModelImpl.mediaPlayer
+        val mediaPlayer = musicListingViewModel.mediaPlayer
         var playing: Boolean = false
 
 
         fun bindData(position: Int, musicListingModel: MusicListingItemModel) {
 
-            if (position != musicListingViewModelImpl.playingPosition) {
-                Log.d("TEst", "$position ${musicListingViewModelImpl.playingPosition}")
+            if (position != musicListingViewModel.playingPosition) {
                 playing = false
                 setPlayIcon()
             } else {
@@ -57,9 +55,9 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
             binding.item = musicListingModel
             binding.executePendingBindings()
 
-            Picasso.with(binding.imageViewMusicListingItemSongPhoto.context).load(musicListingModel.image).into(binding.imageViewMusicListingItemSongPhoto)
+            binding.imageViewMusicListingItemSongPhoto?.setRemoteImage(musicListingModel.image)
 
-            binding.imageBtnMusicListingPlay.setOnClickListener {
+            binding.imageBtnMusicListingPlay?.setOnClickListener {
                 if (playing) {
                     resetPlayingState()
                     setPlayIcon()
@@ -71,19 +69,19 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
 
         private fun startPlay(previewUrl: String) {
 
-            binding.imageBtnMusicListingPlay.visibility = View.GONE
-            binding.progressBarMusicListingPlay.visibility = View.VISIBLE
+            binding.imageBtnMusicListingPlay?.gone()
+            binding.progressBarMusicListingPlay?.visible()
 
             if (mediaPlayer.isPlaying) {
                 resetPlayingState()
-                (binding.imageBtnMusicListingPlay.context as MusicListingActivity).resetListingPlayingIcon()
+                (binding.imageBtnMusicListingPlay?.context as MusicListingActivity).resetListingPlayingIcon()
             }
 
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setDataSource(previewUrl);
+            mediaPlayer.setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build())
+            mediaPlayer.setDataSource(previewUrl)
             mediaPlayer.setOnPreparedListener {
-                binding.imageBtnMusicListingPlay.visibility = View.VISIBLE
-                binding.progressBarMusicListingPlay.visibility = View.GONE
+                binding.imageBtnMusicListingPlay?.visible()
+                binding.progressBarMusicListingPlay?.gone()
                 setStopIcon()
                 it.start()
 
@@ -94,28 +92,41 @@ class MusicListingItemAdapter(private val musicList: ArrayList<MusicListingItemM
             }
             mediaPlayer.prepareAsync()
             playing = true
-            musicListingViewModelImpl.playingPosition = layoutPosition
+            musicListingViewModel.playingPosition = layoutPosition
         }
 
         fun resetPlayingState() {
-            musicListingViewModelImpl.resetMediaPlayer()
+            musicListingViewModel.resetMediaPlayer()
             playing = false
         }
 
-        fun onOtherPlayButtonClick(){
+        fun onOtherPlayButtonClick() {
             playing = false
             setPlayIcon()
         }
 
         private fun setPlayIcon() {
-            binding.imageBtnMusicListingPlay.setImageResource(R.drawable.ic_play_arrow_black)
+            binding.imageBtnMusicListingPlay?.setImageResource(R.drawable.ic_play_arrow_black)
         }
 
         private fun setStopIcon() {
-            binding.imageBtnMusicListingPlay.setImageResource(R.drawable.ic_stop_black)
+            binding.imageBtnMusicListingPlay?.setImageResource(R.drawable.ic_stop_black)
         }
 
 
+    }
+
+    companion object {
+        val DIFF_UTIL = object : DiffUtil.ItemCallback<MusicListingItemModel>() {
+            override fun areItemsTheSame(oldItem: MusicListingItemModel, newItem: MusicListingItemModel): Boolean =
+                    oldItem.previewUrl == newItem.previewUrl
+
+
+            override fun areContentsTheSame(oldItem: MusicListingItemModel, newItem: MusicListingItemModel): Boolean =
+                    oldItem == newItem
+
+
+        }
     }
 
 }

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="vm"
-            type="tam.howard.itunessearch_kotlin.musicListing.MusicListingContract.MusicListingViewModel"/>
+            type="tam.howard.itunessearch_kotlin.musicListing.MusicListingViewModel"/>
 
         <import type="android.widget.EditText" />
         <import type="android.text.Editable" />
@@ -44,7 +44,7 @@
             android:imeOptions="actionSearch"
             android:hint="@string/music_listing_editText_serach_keywords_hint"/>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_music_search_listing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
